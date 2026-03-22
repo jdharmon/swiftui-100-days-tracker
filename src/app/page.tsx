@@ -73,7 +73,7 @@ export default function Home() {
           >
             Hacking with Swift
           </a>{" "}
-          course — track your daily progress
+          course — track your daily progress!
         </p>
       </div>
 
