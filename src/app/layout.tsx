@@ -21,11 +21,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans bg-zinc-950 text-zinc-100 min-h-screen antialiased">
+      <body className="font-sans bg-gray-50 text-gray-900 min-h-screen antialiased">
         {children}
       </body>
     </html>

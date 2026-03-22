@@ -36,22 +36,22 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <h1 className="font-serif text-4xl text-white mb-2">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
           100 Days of SwiftUI
         </h1>
-        <p className="text-zinc-400 text-sm mb-8">
+        <p className="text-gray-500 text-sm mb-8">
           Sign in to sync your progress across devices.
         </p>
 
         {state === "sent" ? (
           <div className="space-y-4">
-            <p className="text-zinc-100">
+            <p className="text-gray-700">
               Check your email — we sent a sign-in link to{" "}
-              <span className="text-orange-400">{email}</span>.
+              <span className="text-blue-500">{email}</span>.
             </p>
             <button
               onClick={() => { setEmail(""); setState("idle"); }}
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
             >
               Use a different email
             </button>
@@ -59,7 +59,7 @@ export default function LoginPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm text-zinc-400 mb-1">
+              <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
                 Email address
               </label>
               <input
@@ -69,7 +69,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-orange-500 transition-colors"
+                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
 
@@ -80,7 +80,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={state === "loading"}
-              className="w-full bg-orange-500 hover:bg-orange-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-2.5 transition-colors"
+              className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-2.5 transition-colors"
             >
               {state === "loading" ? "Sending…" : "Send sign-in link"}
             </button>
