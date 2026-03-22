@@ -15,8 +15,8 @@ export default function MilestoneCard({ day, progress }: Props) {
     <div
       className={`rounded-lg border-2 p-4 transition-colors ${
         allDone
-          ? "border-blue-300 bg-blue-50"
-          : "border-blue-200 bg-blue-50/50"
+          ? "border-accent-mid bg-accent-dim"
+          : "border-accent-dim bg-accent-dim/50"
       }`}
     >
       <div className="flex items-start gap-3 mb-3">
@@ -27,16 +27,16 @@ export default function MilestoneCard({ day, progress }: Props) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-xs font-mono font-bold text-blue-500">
+            <span className="text-xs font-mono font-bold text-accent">
               Day {day.day}
             </span>
-            <span className="text-xs uppercase tracking-wider text-blue-400 font-semibold">
+            <span className="text-xs uppercase tracking-wider text-accent font-semibold opacity-70">
               Milestone
             </span>
           </div>
           <h3
             className={`text-sm font-semibold leading-snug ${
-              allDone ? "text-gray-400" : "text-gray-900"
+              allDone ? "text-fg-dim" : "text-fg"
             }`}
           >
             {day.title}
@@ -44,7 +44,7 @@ export default function MilestoneCard({ day, progress }: Props) {
         </div>
 
         {allDone && (
-          <span className="flex-shrink-0 text-blue-500" title="Completed">
+          <span className="flex-shrink-0 text-accent" title="Completed">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
               <path

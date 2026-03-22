@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Theme tokens ─────────────────────────────────────────────────────────
+   Edit only this block to retheme the entire app.
+   Values are RGB triplets (no rgb() wrapper) so Tailwind opacity modifiers
+   like bg-accent/20 work automatically.
+   ─────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Accent (brand color) */
+  --c-accent:        59 130 246;   /* blue-500  — checkboxes, progress, links */
+  --c-accent-strong: 37  99 235;   /* blue-600  — hover states */
+  --c-accent-mid:    219 234 254;  /* blue-100  — subtle tint */
+  --c-accent-dim:    239 246 255;  /* blue-50   — lightest tint */
+
+  /* Surfaces */
+  --c-surface:       255 255 255;  /* white     — card backgrounds */
+  --c-surface-muted: 249 250 251;  /* gray-50   — page background, done cards */
+  --c-chip:          243 244 246;  /* gray-100  — day badge, done icon bg */
+  --c-track:         229 231 235;  /* gray-200  — progress bar track, skeletons */
+
+  /* Borders */
+  --c-line:          229 231 235;  /* gray-200  — card and input borders */
+
+  /* Text */
+  --c-fg:            17  24  39;   /* gray-900  — headings, primary text */
+  --c-fg-mid:        107 114 128;  /* gray-500  — secondary / caption text */
+  --c-fg-dim:        156 163 175;  /* gray-400  — muted / completed text */
+}

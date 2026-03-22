@@ -23,7 +23,7 @@ export default function ResetButton({ onReset }: Props) {
   if (confirming) {
     return (
       <div className="flex items-center gap-2 text-sm">
-        <span className="text-gray-500">Reset all progress?</span>
+        <span className="text-fg-mid">Reset all progress?</span>
         <button
           onClick={handleConfirm}
           disabled={loading}
@@ -40,7 +40,7 @@ export default function ResetButton({ onReset }: Props) {
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-medium transition-colors"
+          className="px-3 py-1 rounded bg-track hover:bg-track/70 text-fg text-xs font-medium transition-colors"
         >
           Cancel
         </button>
@@ -51,7 +51,7 @@ export default function ResetButton({ onReset }: Props) {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+      className="text-xs text-fg-dim hover:text-red-500 transition-colors"
     >
       Reset all progress
     </button>

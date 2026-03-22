@@ -16,4 +16,22 @@ It is deployed on Vercel and uses Supabase auth to achieve this.
 | Auth | Supabase Magic Link (OTP) | Email-based; PKCE flow; `/auth/callback` route exchanges code for session |
 | Hosting | Vercel | Push to GitHub, import to Vercel, add env vars |
 | Fonts | Google Fonts | Inter, loaded via `<link>` in layout; also falls back to `-apple-system` (SF Pro on Apple devices) |
-| Styling | Tailwind CSS | Light color scheme: `bg-gray-50` body, `bg-white` cards, `blue-500` accent (iOS system blue) |
+| Styling | Tailwind CSS | Semantic color tokens — **edit only `src/app/globals.css` `:root` to retheme** |
+
+### Color token system
+All themed colors are CSS custom properties in `globals.css` `:root`, mapped to Tailwind color names in `tailwind.config.ts`. Components use only semantic names — never raw Tailwind palette colors like `blue-500` or `gray-900`.
+
+| Token | Tailwind class | Default |
+|---|---|---|
+| `--c-accent` | `accent` | blue-500 — checkboxes, progress bar, links |
+| `--c-accent-strong` | `accent-strong` | blue-600 — hover states |
+| `--c-accent-mid` | `accent-mid` | blue-100 — subtle tint |
+| `--c-accent-dim` | `accent-dim` | blue-50 — lightest tint |
+| `--c-surface` | `surface` | white — card backgrounds |
+| `--c-surface-muted` | `surface-muted` | gray-50 — page bg, done cards |
+| `--c-chip` | `chip` | gray-100 — badges, icon backgrounds |
+| `--c-track` | `track` | gray-200 — progress track, skeletons |
+| `--c-line` | `line` | gray-200 — borders |
+| `--c-fg` | `fg` | gray-900 — primary text |
+| `--c-fg-mid` | `fg-mid` | gray-500 — secondary text |
+| `--c-fg-dim` | `fg-dim` | gray-400 — muted / completed text |

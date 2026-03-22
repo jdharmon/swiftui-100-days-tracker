@@ -16,10 +16,10 @@ export default function DayCard({ day, progress }: Props) {
     <div
       className={`rounded-lg border p-4 transition-colors ${
         allDone
-          ? "border-gray-200 bg-gray-50"
+          ? "border-line bg-surface-muted"
           : anyDone
-          ? "border-gray-200 bg-white"
-          : "border-gray-200 bg-white"
+          ? "border-line bg-surface"
+          : "border-line bg-surface"
       }`}
     >
       <div className="flex items-start gap-3 mb-3">
@@ -27,8 +27,8 @@ export default function DayCard({ day, progress }: Props) {
         <span
           className={`flex-shrink-0 text-xs font-mono font-bold px-2 py-1 rounded ${
             allDone
-              ? "bg-blue-50 text-blue-500"
-              : "bg-gray-100 text-gray-500"
+              ? "bg-accent-dim text-accent"
+              : "bg-chip text-fg-mid"
           }`}
         >
           Day {day.day}
@@ -37,7 +37,7 @@ export default function DayCard({ day, progress }: Props) {
         {/* Title */}
         <h3
           className={`text-sm font-medium leading-snug ${
-            allDone ? "text-gray-400" : "text-gray-900"
+            allDone ? "text-fg-dim" : "text-fg"
           }`}
         >
           {day.title}
@@ -45,7 +45,7 @@ export default function DayCard({ day, progress }: Props) {
 
         {/* All-done checkmark */}
         {allDone && (
-          <span className="flex-shrink-0 ml-auto text-blue-500" title="Completed">
+          <span className="flex-shrink-0 ml-auto text-accent" title="Completed">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
               <path

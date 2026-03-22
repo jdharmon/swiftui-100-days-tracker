@@ -34,8 +34,8 @@ export default function VideoItem({
         }
         className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
           completed
-            ? "bg-blue-500 border-blue-500"
-            : "border-gray-300 hover:border-blue-400"
+            ? "bg-accent border-accent"
+            : "border-line hover:border-accent"
         }`}
         aria-label={completed ? "Mark incomplete" : "Mark complete"}
       >
@@ -54,19 +54,19 @@ export default function VideoItem({
 
       <button
         onClick={handlePlay}
-        className={`flex items-center gap-2 text-sm transition-colors hover:text-blue-500 ${
-          completed ? "text-gray-400" : "text-gray-700"
+        className={`flex items-center gap-2 text-sm transition-colors hover:text-accent ${
+          completed ? "text-fg-dim" : "text-fg"
         }`}
       >
         <span
           className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
             completed
-              ? "bg-gray-100"
-              : "bg-blue-100 group-hover:bg-blue-200"
+              ? "bg-chip"
+              : "bg-accent-dim group-hover:bg-accent-mid"
           }`}
         >
           <svg
-            className={`w-3 h-3 ml-0.5 ${completed ? "text-gray-400" : "text-blue-500"}`}
+            className={`w-3 h-3 ml-0.5 ${completed ? "text-fg-dim" : "text-accent"}`}
             fill="currentColor"
             viewBox="0 0 12 12"
           >

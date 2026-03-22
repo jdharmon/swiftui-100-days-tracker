@@ -17,11 +17,11 @@ function LoadingScreen() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-12">
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-64" />
-        <div className="h-4 bg-gray-200 rounded w-48" />
-        <div className="h-3 bg-gray-200 rounded-full mt-6" />
+        <div className="h-8 bg-track rounded w-64" />
+        <div className="h-4 bg-track rounded w-48" />
+        <div className="h-3 bg-track rounded-full mt-6" />
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-20 bg-white border border-gray-200 rounded-lg" />
+          <div key={i} className="h-20 bg-surface border border-line rounded-lg" />
         ))}
       </div>
     </main>
@@ -60,16 +60,16 @@ export default function Home() {
     <main className="max-w-3xl mx-auto px-4 py-12">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-1">
+        <h1 className="text-4xl font-bold text-fg mb-1">
           100 Days of SwiftUI
         </h1>
-        <p className="text-gray-500 text-sm">
+        <p className="text-fg-mid text-sm">
           Paul Hudson&apos;s{" "}
           <a
             href="https://www.hackingwithswift.com/100/swiftui"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-600 transition-colors"
+            className="text-accent hover:text-accent-strong transition-colors"
           >
             Hacking with Swift
           </a>{" "}
@@ -102,12 +102,12 @@ export default function Home() {
 
       {/* Footer */}
       <div className="mt-12 flex items-center justify-center gap-4">
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-fg-dim">
           Progress is synced to your account — accessible from any device.
         </p>
         <button
           onClick={() => getSupabase().auth.signOut()}
-          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-xs text-fg-dim hover:text-fg-mid transition-colors"
         >
           Sign out
         </button>

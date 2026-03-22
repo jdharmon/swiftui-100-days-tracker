@@ -25,8 +25,8 @@ export default function ContentItem({
         }
         className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
           completed
-            ? "bg-blue-500 border-blue-500"
-            : "border-gray-300 hover:border-blue-400"
+            ? "bg-accent border-accent"
+            : "border-line hover:border-accent"
         }`}
         aria-label={completed ? "Mark incomplete" : "Mark complete"}
       >
@@ -48,8 +48,8 @@ export default function ContentItem({
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => !completed && onComplete(item.key, day)}
-        className={`flex items-center gap-2 text-sm transition-colors hover:text-blue-500 ${
-          completed ? "text-gray-400 line-through" : "text-gray-700"
+        className={`flex items-center gap-2 text-sm transition-colors hover:text-accent ${
+          completed ? "text-fg-dim line-through" : "text-fg"
         }`}
       >
         <span>{icon}</span>
