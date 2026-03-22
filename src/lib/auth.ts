@@ -1,14 +1,9 @@
 import { getSupabase } from "./supabase";
 
-export async function ensureAnonymousSession(): Promise<string> {
+export async function getSessionUserId(): Promise<string | null> {
   const supabase = getSupabase();
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  if (session?.user) return session.user.id;
-
-  const { data, error } = await supabase.auth.signInAnonymously();
-  if (error) throw error;
-  return data.user!.id;
+  return session?.user?.id ?? null;
 }

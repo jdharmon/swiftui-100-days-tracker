@@ -2,6 +2,8 @@
 
 export const dynamic = "force-dynamic";
 
+import { useEffect, useState } from "react";
+import { getSupabase } from "@/lib/supabase";
 import { useProgress } from "@/hooks/useProgress";
 import { COURSE_DATA } from "@/data/course";
 import ProgressBar from "@/components/ProgressBar";
@@ -9,6 +11,7 @@ import ResetButton from "@/components/ResetButton";
 import DayCard from "@/components/DayCard";
 import MilestoneCard from "@/components/MilestoneCard";
 import VideoModal from "@/components/VideoModal";
+import LoginPage from "@/components/LoginPage";
 
 function LoadingScreen() {
   return (
@@ -26,8 +29,31 @@ function LoadingScreen() {
 }
 
 export default function Home() {
-  const progress = useProgress();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
+  useEffect(() => {
+    const supabase = getSupabase();
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id ?? null);
+      setAuthLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null);
+      setAuthLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const progress = useProgress(userId);
+
+  if (authLoading) return <LoadingScreen />;
+  if (!userId) return <LoginPage />;
   if (progress.isLoading) return <LoadingScreen />;
 
   return (
@@ -75,9 +101,17 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <p className="mt-12 text-center text-xs text-zinc-600">
-        Progress is saved automatically to your browser session.
-      </p>
+      <div className="mt-12 flex items-center justify-center gap-4">
+        <p className="text-xs text-zinc-600">
+          Progress is synced to your account — accessible from any device.
+        </p>
+        <button
+          onClick={() => getSupabase().auth.signOut()}
+          className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+        >
+          Sign out
+        </button>
+      </div>
 
       {/* Video modal */}
       {progress.activeVideoId && (

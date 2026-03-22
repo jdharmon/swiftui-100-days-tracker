@@ -57,7 +57,7 @@ Open [http://localhost:3000](http://localhost:3000).
 2. Import the repo at [vercel.com/new](https://vercel.com/new)
 3. Add environment variables in **Project Settings → Environment Variables**:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_KEY`
 4. Deploy
 
 ## Adding Video IDs

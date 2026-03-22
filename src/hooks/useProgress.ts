@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { ensureAnonymousSession } from "@/lib/auth";
 import * as progressLib from "@/lib/progress";
 import { TOTAL_ITEMS } from "@/data/course";
 import { ProgressMap } from "@/types";
@@ -19,37 +18,40 @@ export interface UseProgressReturn {
   resetAll: () => Promise<void>;
 }
 
-export function useProgress(): UseProgressReturn {
+export function useProgress(userId: string | null): UseProgressReturn {
   const [isLoading, setIsLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
   const [progressMap, setProgressMap] = useState<ProgressMap>({});
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    async function init() {
-      try {
-        const uid = await ensureAnonymousSession();
-        const map = await progressLib.loadProgress(uid);
-        if (!cancelled) {
-          setUserId(uid);
-          setProgressMap(map);
-        }
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
+    if (!userId) {
+      setProgressMap({});
+      setIsLoading(false);
+      return;
     }
-    init();
-    return () => { cancelled = true; };
-  }, []);
+    let cancelled = false;
+    setIsLoading(true);
+    progressLib
+      .loadProgress(userId)
+      .then((map) => {
+        if (!cancelled) {
+          setProgressMap(map);
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
 
   const markComplete = useCallback(
     (itemKey: string, day: number) => {
       if (!userId || progressMap[itemKey]) return;
-      // Optimistic update
       setProgressMap((prev) => ({ ...prev, [itemKey]: true }));
       progressLib.markComplete(userId, itemKey, day).catch(() => {
-        // Roll back on failure
         setProgressMap((prev) => {
           const next = { ...prev };
           delete next[itemKey];
@@ -63,14 +65,12 @@ export function useProgress(): UseProgressReturn {
   const markIncomplete = useCallback(
     (itemKey: string) => {
       if (!userId || !progressMap[itemKey]) return;
-      // Optimistic update
       setProgressMap((prev) => {
         const next = { ...prev };
         delete next[itemKey];
         return next;
       });
       progressLib.markIncomplete(userId, itemKey).catch(() => {
-        // Roll back on failure
         setProgressMap((prev) => ({ ...prev, [itemKey]: true }));
       });
     },
@@ -89,9 +89,8 @@ export function useProgress(): UseProgressReturn {
   }, [userId, progressMap]);
 
   const completedCount = Object.values(progressMap).filter(Boolean).length;
-  const percentage = TOTAL_ITEMS > 0
-    ? Math.round((completedCount / TOTAL_ITEMS) * 100)
-    : 0;
+  const percentage =
+    TOTAL_ITEMS > 0 ? Math.round((completedCount / TOTAL_ITEMS) * 100) : 0;
 
   return {
     isLoading,
