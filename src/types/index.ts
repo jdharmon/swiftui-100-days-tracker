@@ -1,11 +1,18 @@
 export type ItemType = "content" | "video" | "challenge";
 
+export interface CourseSubItem {
+  type: "optional" | "test";
+  label: string;
+  url: string;
+}
+
 export interface CourseItem {
-  key: string;       // e.g. "day-1-content", "day-1-video-1", "day-25-challenge"
+  key: string;
   type: ItemType;
   label: string;
-  url: string;       // hackingwithswift.com URL (content/challenge) or youtube URL (video)
-  videoId?: string;  // YouTube video ID; undefined = open in new tab instead of modal
+  url: string;
+  videoId?: string;
+  subitems?: CourseSubItem[]; // optional readings / tests — no checkbox
 }
 
 export interface CourseDay {

@@ -2,6 +2,7 @@ import { CourseItem } from "@/types";
 
 interface Props {
   item: CourseItem;
+  index: number;
   day: number;
   completed: boolean;
   onComplete: (itemKey: string, day: number) => void;
@@ -10,6 +11,7 @@ interface Props {
 
 export default function ContentItem({
   item,
+  index,
   day,
   completed,
   onComplete,
@@ -18,27 +20,21 @@ export default function ContentItem({
   const icon = item.type === "challenge" ? "🏆" : "📖";
 
   return (
-    <div className="flex items-center gap-3 group">
+    <div className="flex items-center gap-2 group">
+      <span className="w-4 text-right text-xs text-fg-dim flex-shrink-0 select-none">
+        {index}.
+      </span>
+
       <button
-        onClick={() =>
-          completed ? onUncomplete(item.key) : onComplete(item.key, day)
-        }
+        onClick={() => completed ? onUncomplete(item.key) : onComplete(item.key, day)}
         className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-          completed
-            ? "bg-accent border-accent"
-            : "border-line hover:border-accent"
+          completed ? "bg-accent border-accent" : "border-line hover:border-accent"
         }`}
         aria-label={completed ? "Mark incomplete" : "Mark complete"}
       >
         {completed && (
           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 12 12">
-            <path
-              d="M2 6l3 3 5-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
       </button>
@@ -59,13 +55,7 @@ export default function ContentItem({
           fill="none"
           viewBox="0 0 12 12"
         >
-          <path
-            d="M2 10L10 2M10 2H4M10 2v6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
     </div>

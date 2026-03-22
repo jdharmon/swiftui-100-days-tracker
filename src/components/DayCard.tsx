@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { CourseDay } from "@/types";
 import { UseProgressReturn } from "@/hooks/useProgress";
 import ContentItem from "./ContentItem";
@@ -9,82 +12,99 @@ interface Props {
 }
 
 export default function DayCard({ day, progress }: Props) {
-  const allDone = day.items.every((item) => progress.progressMap[item.key]);
-  const anyDone = day.items.some((item) => progress.progressMap[item.key]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const trackable = day.items.filter((i) => i.type !== "content");
+  const allDone = trackable.length > 0 && trackable.every((i) => progress.progressMap[i.key]);
+  const anyDone = trackable.some((i) => progress.progressMap[i.key]);
+
+  const contentLinks = day.items.filter((i) => i.type === "content");
+  const numberedItems = day.items.filter((i) => i.type !== "content");
 
   return (
-    <div
-      className={`rounded-lg border p-4 transition-colors ${
-        allDone
-          ? "border-line bg-surface-muted"
-          : anyDone
-          ? "border-line bg-surface"
-          : "border-line bg-surface"
-      }`}
-    >
-      <div className="flex items-start gap-3 mb-3">
-        {/* Day badge */}
-        <span
-          className={`flex-shrink-0 text-xs font-mono font-bold px-2 py-1 rounded ${
-            allDone
-              ? "bg-accent-dim text-accent"
-              : "bg-chip text-fg-mid"
-          }`}
-        >
+    <div className={`rounded-lg border transition-colors ${
+      allDone ? "border-line bg-surface-muted" : "border-line bg-surface"
+    }`}>
+      {/* Clickable header */}
+      <button
+        onClick={() => setIsOpen((o) => !o)}
+        className="w-full flex items-center gap-3 p-4 text-left"
+      >
+        <span className={`flex-shrink-0 text-xs font-mono font-bold px-2 py-1 rounded ${
+          allDone || anyDone ? "bg-accent-dim text-accent" : "bg-chip text-fg-mid"
+        }`}>
           Day {day.day}
         </span>
 
-        {/* Title */}
-        <h3
-          className={`text-sm font-medium leading-snug ${
-            allDone ? "text-fg-dim" : "text-fg"
-          }`}
-        >
+        <h3 className={`flex-1 text-sm font-medium leading-snug ${
+          allDone ? "text-fg-dim" : "text-fg"
+        }`}>
           {day.title}
         </h3>
 
-        {/* All-done checkmark */}
         {allDone && (
-          <span className="flex-shrink-0 ml-auto text-accent" title="Completed">
+          <span className="flex-shrink-0 text-accent" title="Completed">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
-              <path
-                d="M5 8l2.5 2.5L11 5.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M5 8l2.5 2.5L11 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         )}
-      </div>
 
-      {/* Items */}
-      <div className="space-y-2 pl-1">
-        {day.items.map((item) =>
-          item.type === "video" ? (
-            <VideoItem
+        <svg
+          className={`flex-shrink-0 w-4 h-4 text-fg-dim transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          fill="none" viewBox="0 0 16 16"
+        >
+          <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {/* Expandable content */}
+      {isOpen && (
+        <div className="px-4 pb-4 space-y-2 border-t border-line pt-3">
+          {/* Link-only items (content type) */}
+          {contentLinks.map((item) => (
+            <a
               key={item.key}
-              item={item}
-              day={day.day}
-              completed={!!progress.progressMap[item.key]}
-              onComplete={progress.markComplete}
-              onUncomplete={progress.markIncomplete}
-              onPlayVideo={progress.setActiveVideoId}
-            />
-          ) : (
-            <ContentItem
-              key={item.key}
-              item={item}
-              day={day.day}
-              completed={!!progress.progressMap[item.key]}
-              onComplete={progress.markComplete}
-              onUncomplete={progress.markIncomplete}
-            />
-          )
-        )}
-      </div>
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-fg-mid hover:text-accent transition-colors"
+            >
+              <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 12 12">
+                <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {item.label}
+            </a>
+          ))}
+
+          {/* Numbered items with checkboxes */}
+          {numberedItems.map((item, idx) =>
+            item.type === "video" ? (
+              <VideoItem
+                key={item.key}
+                item={item}
+                index={idx + 1}
+                day={day.day}
+                completed={!!progress.progressMap[item.key]}
+                onComplete={progress.markComplete}
+                onUncomplete={progress.markIncomplete}
+                onPlayVideo={progress.setActiveVideoId}
+              />
+            ) : (
+              <ContentItem
+                key={item.key}
+                item={item}
+                index={idx + 1}
+                day={day.day}
+                completed={!!progress.progressMap[item.key]}
+                onComplete={progress.markComplete}
+                onUncomplete={progress.markIncomplete}
+              />
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 }
