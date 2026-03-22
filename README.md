@@ -2,15 +2,17 @@
 
 A progress tracker for Paul Hudson's [100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui) course — built with Next.js 14, Supabase, and Tailwind CSS.
 
+**Live app:** https://swiftui-100-days-tracker.vercel.app
+
 ## Features
 
 - All 100 days with links to reading content, videos, and challenges
-- Videos play directly in-app (embedded YouTube player, works on desktop and mobile)
 - Progress auto-saves as you click through content and watch videos
 - Uncheck individual items at any time
 - Overall completion percentage with animated progress bar
 - Reset all progress with a single click
-- Anonymous authentication — no sign-up required, progress persists across browser sessions
+- Magic link sign-in (email OTP) — no password required
+- Progress syncs across devices when signed in
 
 ## Stack
 
@@ -18,9 +20,9 @@ A progress tracker for Paul Hudson's [100 Days of SwiftUI](https://www.hackingwi
 |---|---|
 | Framework | Next.js 14 (App Router) |
 | Database | Supabase (Postgres + Row Level Security) |
-| Auth | Supabase Anonymous Sign-in |
+| Auth | Supabase Magic Link (email OTP, PKCE flow) |
 | Styling | Tailwind CSS |
-| Fonts | DM Serif Display + DM Sans (Google Fonts) |
+| Fonts | Inter (Google Fonts) |
 | Hosting | Vercel |
 
 ## Getting Started
@@ -32,7 +34,7 @@ A progress tracker for Paul Hudson's [100 Days of SwiftUI](https://www.hackingwi
    ```
    supabase/migrations/0001_create_progress.sql
    ```
-3. In **Authentication → Providers**, ensure **Anonymous Sign-ins** are enabled
+3. In **Authentication → URL Configuration**, add your app's URL to **Redirect URLs** (e.g. `http://localhost:3000/auth/callback` for local dev)
 
 ### 2. Configure environment variables
 
@@ -58,20 +60,13 @@ Open [http://localhost:3000](http://localhost:3000).
 3. Add environment variables in **Project Settings → Environment Variables**:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_KEY`
-4. Deploy
+4. Add your Vercel deployment URL to **Supabase → Authentication → URL Configuration → Redirect URLs** (e.g. `https://your-app.vercel.app/auth/callback`)
+5. Deploy
 
-## Adding Video IDs
+## How Authentication Works
 
-Videos without a known YouTube ID open in a new tab. To embed a video directly:
-
-1. Open `src/data/course.ts`
-2. Find the day's video item and set `videoId` to the YouTube video ID
-3. Example: `videoId: "dQw4w9WgXcQ"`
-
-No other code changes are needed.
+The app uses Supabase magic links (email OTP with PKCE flow). When a user enters their email, Supabase sends a sign-in link. Clicking it redirects to `/auth/callback`, which exchanges the code for a session. The session is stored in cookies and persists across page loads.
 
 ## How Progress Works
 
-Progress is stored per-item in Supabase's `progress` table, keyed by `user_id` (anonymous) and `item_key` (e.g. `day-1-content`, `day-1-video-1`). Each browser session gets a stable anonymous user ID stored in localStorage by the Supabase SDK.
-
-Note: progress is tied to the browser/device. Opening the app in a different browser will start fresh.
+Progress is stored per-item in Supabase's `progress` table, keyed by `user_id` and `item_key` (e.g. `day-1-video-1`). Because auth is tied to an email address, progress syncs automatically across any device or browser where you sign in.
