@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CourseDay } from "@/types";
 import { UseProgressReturn } from "@/hooks/useProgress";
 import ContentItem from "./ContentItem";
@@ -9,10 +9,21 @@ import VideoItem from "./VideoItem";
 interface Props {
   day: CourseDay;
   progress: UseProgressReturn;
+  autoOpen?: boolean;
 }
 
-export default function DayCard({ day, progress }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function DayCard({ day, progress, autoOpen = false }: Props) {
+  const [isOpen, setIsOpen] = useState(autoOpen);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (autoOpen && cardRef.current) {
+      const stickyBar = document.getElementById("sticky-progress");
+      const offset = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
+      const top = cardRef.current.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  }, [autoOpen]);
 
   const trackable = day.items.filter((i) => i.type !== "content");
   const allDone = trackable.length > 0 && trackable.every((i) => progress.progressMap[i.key]);
@@ -22,7 +33,7 @@ export default function DayCard({ day, progress }: Props) {
   const numberedItems = day.items.filter((i) => i.type !== "content");
 
   return (
-    <div className={`rounded-lg border transition-colors ${
+    <div ref={cardRef} className={`rounded-lg border transition-colors ${
       allDone ? "border-line bg-surface-muted" : "border-line bg-surface"
     }`}>
       {/* Clickable header */}

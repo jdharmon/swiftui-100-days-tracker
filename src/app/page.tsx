@@ -52,6 +52,14 @@ export default function Home() {
 
   const progress = useProgress(userId);
 
+  const firstIncompleteDay = progress.isLoading
+    ? null
+    : COURSE_DATA.find((day) => {
+        if (day.isMilestone) return false;
+        const trackable = day.items.filter((i) => i.type !== "content");
+        return trackable.length > 0 && !trackable.every((i) => progress.progressMap[i.key]);
+      })?.day ?? null;
+
   if (authLoading) return <LoadingScreen />;
   if (!userId) return <LoginPage />;
   if (progress.isLoading) return <LoadingScreen />;
@@ -81,7 +89,7 @@ export default function Home() {
       </div>
 
       {/* Progress bar — sticky on scroll */}
-      <div className="sticky top-0 z-10 bg-surface py-3 -mx-4 px-4 border-b border-line shadow-sm">
+      <div id="sticky-progress" className="sticky top-0 z-10 bg-surface py-3 -mx-4 px-4 border-b border-line shadow-sm">
         <ProgressBar
           completed={progress.completedCount}
           total={progress.totalItems}
@@ -100,7 +108,7 @@ export default function Home() {
           day.isMilestone ? (
             <MilestoneCard key={day.day} day={day} progress={progress} />
           ) : (
-            <DayCard key={day.day} day={day} progress={progress} />
+            <DayCard key={day.day} day={day} progress={progress} autoOpen={day.day === firstIncompleteDay} />
           )
         )}
       </div>
