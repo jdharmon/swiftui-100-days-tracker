@@ -25,12 +25,8 @@ export default function DayCard({ day, progress, autoOpen = false }: Props) {
     }
   }, [autoOpen]);
 
-  const trackable = day.items.filter((i) => i.type !== "content");
-  const allDone = trackable.length > 0 && trackable.every((i) => progress.progressMap[i.key]);
-  const anyDone = trackable.some((i) => progress.progressMap[i.key]);
-
-  const contentLinks = day.items.filter((i) => i.type === "content");
-  const numberedItems = day.items.filter((i) => i.type !== "content");
+  const allDone = day.items.length > 0 && day.items.every((i) => progress.progressMap[i.key]);
+  const anyDone = day.items.some((i) => progress.progressMap[i.key]);
 
   return (
     <div ref={cardRef} className={`rounded-lg border transition-colors ${
@@ -73,24 +69,19 @@ export default function DayCard({ day, progress, autoOpen = false }: Props) {
       {/* Expandable content */}
       {isOpen && (
         <div className="px-4 pb-4 space-y-2 border-t border-line pt-3">
-          {/* Link-only items (content type) */}
-          {contentLinks.map((item) => (
-            <a
-              key={item.key}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-fg-mid hover:text-accent transition-colors"
-            >
-              <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 12 12">
-                <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              {item.label}
-            </a>
-          ))}
+          <a
+            href={day.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sm text-fg-mid hover:text-accent transition-colors"
+          >
+            <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 12 12">
+              <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Read: Day {day.day}
+          </a>
 
-          {/* Numbered items with checkboxes */}
-          {numberedItems.map((item, idx) =>
+          {day.items.map((item, idx) =>
             item.type === "video" ? (
               <VideoItem
                 key={item.key}

@@ -19,6 +19,7 @@ export interface CourseDay {
   day: number;
   title: string;
   isMilestone: boolean;
+  url: string;
   items: CourseItem[];
 }
 
