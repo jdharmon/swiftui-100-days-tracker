@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { CourseDay } from "@/types";
 import { UseProgressReturn } from "@/hooks/useProgress";
 import ContentItem from "./ContentItem";
-import VideoItem from "./VideoItem";
 
 interface Props {
   day: CourseDay;
@@ -81,30 +80,17 @@ export default function DayCard({ day, progress, autoOpen = false }: Props) {
             Read: Day {day.day}
           </a>
 
-          {day.items.map((item, idx) =>
-            item.type === "video" ? (
-              <VideoItem
-                key={item.key}
-                item={item}
-                index={idx + 1}
-                day={day.day}
-                completed={!!progress.progressMap[item.key]}
-                onComplete={progress.markComplete}
-                onUncomplete={progress.markIncomplete}
-                onPlayVideo={progress.setActiveVideoId}
-              />
-            ) : (
-              <ContentItem
-                key={item.key}
-                item={item}
-                index={idx + 1}
-                day={day.day}
-                completed={!!progress.progressMap[item.key]}
-                onComplete={progress.markComplete}
-                onUncomplete={progress.markIncomplete}
-              />
-            )
-          )}
+          {day.items.map((item, idx) => (
+            <ContentItem
+              key={item.key}
+              item={item}
+              index={idx + 1}
+              day={day.day}
+              completed={!!progress.progressMap[item.key]}
+              onComplete={progress.markComplete}
+              onUncomplete={progress.markIncomplete}
+            />
+          ))}
         </div>
       )}
     </div>
