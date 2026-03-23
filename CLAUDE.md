@@ -35,3 +35,41 @@ All themed colors are CSS custom properties in `globals.css` `:root`, mapped to 
 | `--c-fg` | `fg` | gray-900 — primary text |
 | `--c-fg-mid` | `fg-mid` | gray-500 — secondary text |
 | `--c-fg-dim` | `fg-dim` | gray-400 — muted / completed text |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout; loads Google Fonts (Inter), sets metadata
+│   ├── page.tsx            # Home page ("use client"); auth check, progress loading, renders cards
+│   ├── globals.css         # CSS custom properties (:root) for all theme tokens
+│   └── auth/callback/
+│       └── route.ts        # GET /auth/callback; PKCE code exchange for Supabase session
+│
+├── components/
+│   ├── DayCard.tsx         # Collapsible day card; completion state, auto-scroll to first incomplete
+│   ├── ContentItem.tsx     # Reading/challenge item with external link and checkbox
+│   ├── VideoItem.tsx       # Video item with optional subitems; opens VideoModal
+│   ├── VideoModal.tsx      # Full-screen modal with embedded YouTube iframe
+│   ├── MilestoneCard.tsx   # Special card for milestone days
+│   ├── ProgressBar.tsx     # Sticky header showing completed/total and percentage
+│   ├── LoginPage.tsx       # Magic link email form for Supabase auth
+│   └── ResetButton.tsx     # Reset all progress with confirmation
+│
+├── hooks/
+│   └── useProgress.ts      # Main hook; progress state, completion counts, video modal state
+│
+├── lib/
+│   ├── supabase.ts         # Singleton Supabase browser client
+│   ├── auth.ts             # getSessionUserId(); fetches current user from session
+│   └── progress.ts         # DB operations: loadProgress, markComplete, markIncomplete, resetAll
+│
+├── types/
+│   └── index.ts            # CourseDay, CourseItem, CourseSubItem, ItemType, ProgressMap
+│
+└── data/
+    └── course.ts           # COURSE_DATA: all 100 days with items (video/challenge) and subitems
+```
