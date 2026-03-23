@@ -80,12 +80,14 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Progress bar */}
-      <ProgressBar
-        completed={progress.completedCount}
-        total={progress.totalItems}
-        percentage={progress.percentage}
-      />
+      {/* Progress bar — sticky on scroll */}
+      <div className="sticky top-0 z-10 bg-surface py-3 -mx-4 px-4 border-b border-line shadow-sm">
+        <ProgressBar
+          completed={progress.completedCount}
+          total={progress.totalItems}
+          percentage={progress.percentage}
+        />
+      </div>
 
       {/* Reset */}
       <div className="mb-8">

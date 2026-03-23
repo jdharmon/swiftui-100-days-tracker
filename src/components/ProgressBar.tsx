@@ -6,7 +6,7 @@ interface Props {
 
 export default function ProgressBar({ completed, total, percentage }: Props) {
   return (
-    <div className="mb-6">
+    <div>
       <div className="flex items-baseline justify-between mb-2">
         <span className="text-2xl font-bold text-fg">{percentage}%</span>
         <span className="text-sm text-fg-mid">
