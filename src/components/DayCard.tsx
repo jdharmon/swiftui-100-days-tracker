@@ -19,7 +19,7 @@ export default function DayCard({ day, progress, autoOpen = false }: Props) {
   useEffect(() => {
     if (autoOpen && cardRef.current) {
       const stickyBar = document.getElementById("sticky-progress");
-      const offset = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
+      const offset = stickyBar ? stickyBar.getBoundingClientRect().height + 12: 0;
       const top = cardRef.current.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
     }
