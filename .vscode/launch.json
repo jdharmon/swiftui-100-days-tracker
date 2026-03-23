@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "preLaunchTask": "next dev"
+        },
+        {
+            "name": "Debug",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "preLaunchTask": "next dev",
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+                "webpack://_N_E/*": "${webRoot}/*"
+            }
+        }
+    ]
+}
