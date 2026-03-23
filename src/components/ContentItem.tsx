@@ -17,7 +17,20 @@ export default function ContentItem({
   onComplete,
   onUncomplete,
 }: Props) {
-  const icon = item.type === "challenge" ? "🏆" : "📖";
+  let icon;
+  switch (item.type) {
+    case "video":
+      icon = "▶️";
+      break;
+    case "challenge":
+      icon = "🏆";
+      break;
+    case "content":
+      icon = "📖";
+      break;
+    default:
+      icon = "🔗";
+  }
 
   return (
     <div className="flex items-center gap-2 group">
@@ -48,7 +61,7 @@ export default function ContentItem({
           completed ? "text-fg-dim line-through" : "text-fg"
         }`}
       >
-        <span>{icon}</span>
+        <span className="text-lg">{icon}</span>
         <span>{item.label}</span>
         <svg
           className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity"

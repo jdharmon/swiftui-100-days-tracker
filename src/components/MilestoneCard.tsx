@@ -4,7 +4,6 @@ import { useState } from "react";
 import { CourseDay } from "@/types";
 import { UseProgressReturn } from "@/hooks/useProgress";
 import ContentItem from "./ContentItem";
-import VideoItem from "./VideoItem";
 
 interface Props {
   day: CourseDay;
@@ -14,12 +13,8 @@ interface Props {
 export default function MilestoneCard({ day, progress }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const trackable = day.items.filter((i) => i.type !== "content");
-  const allDone = trackable.length > 0 && trackable.every((i) => progress.progressMap[i.key]);
-  const anyDone = trackable.some((i) => progress.progressMap[i.key]);
-
-  const contentLinks = day.items.filter((i) => i.type === "content");
-  const numberedItems = day.items.filter((i) => i.type !== "content");
+  const allDone = day.items.length > 0 && day.items.every((i) => progress.progressMap[i.key]);
+  const anyDone = day.items.some((i) => progress.progressMap[i.key]);
 
   return (
     <div className={`rounded-lg border-2 transition-colors ${
@@ -64,45 +59,29 @@ export default function MilestoneCard({ day, progress }: Props) {
       {/* Expandable content */}
       {isOpen && (
         <div className="px-4 pb-4 space-y-2 border-t border-accent-dim pt-3">
-          {contentLinks.map((item) => (
-            <a
-              key={item.key}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-fg-mid hover:text-accent transition-colors"
-            >
-              <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 12 12">
-                <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              {item.label}
-            </a>
-          ))}
+          <a
+            href={day.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sm text-fg-mid hover:text-accent transition-colors"
+          >
+            <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 12 12">
+              <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Read: Day {day.day}
+          </a>
 
-          {numberedItems.map((item, idx) =>
-            item.type === "video" ? (
-              <VideoItem
-                key={item.key}
-                item={item}
-                index={idx + 1}
-                day={day.day}
-                completed={!!progress.progressMap[item.key]}
-                onComplete={progress.markComplete}
-                onUncomplete={progress.markIncomplete}
-                onPlayVideo={progress.setActiveVideoId}
-              />
-            ) : (
-              <ContentItem
-                key={item.key}
-                item={item}
-                index={idx + 1}
-                day={day.day}
-                completed={!!progress.progressMap[item.key]}
-                onComplete={progress.markComplete}
-                onUncomplete={progress.markIncomplete}
-              />
-            )
-          )}
+          {day.items.map((item, idx) => (
+            <ContentItem
+              key={item.key}
+              item={item}
+              index={idx + 1}
+              day={day.day}
+              completed={!!progress.progressMap[item.key]}
+              onComplete={progress.markComplete}
+              onUncomplete={progress.markIncomplete}
+            />
+          ))}
         </div>
       )}
     </div>
