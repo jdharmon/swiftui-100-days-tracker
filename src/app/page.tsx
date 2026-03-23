@@ -75,6 +75,9 @@ export default function Home() {
           </a>{" "}
           course — track your daily progress!
         </p>
+        <p className="text-fg-mid text-sm mt-2">
+          All course content, materials, and concepts presented on this site are the intellectual property of Paul Hudson, creator of <span className="italic">100 Days of SwiftUI</span>. This site is an independent tracker and is not affiliated with or endorsed by him.
+        </p>
       </div>
 
       {/* Progress bar */}
