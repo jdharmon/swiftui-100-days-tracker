@@ -7,6 +7,19 @@ It is deployed on Vercel and uses Supabase auth to achieve this.
 
 ---
 
+## Commands
+- Dev server: `npm run dev` (runs on port 3000)
+- Build: `npm run build`
+
+## Environment Variables
+Required in `.env.local`:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_KEY`
+
+See `.env.local.example` for the template.
+
+---
+
 ## Stack & Key Decisions
 
 | Layer | Choice | Notes |
@@ -14,8 +27,6 @@ It is deployed on Vercel and uses Supabase auth to achieve this.
 | Framework | Next.js 14 (App Router) | `"use client"` on page.tsx — no server components needed |
 | Database | Supabase (Postgres) | `progress` table with `user_id`, `item_key`, `day`, `completed` |
 | Auth | Supabase Magic Link (OTP) | Email-based; PKCE flow; `/auth/callback` route exchanges code for session |
-| Hosting | Vercel | Push to GitHub, import to Vercel, add env vars |
-| Fonts | Google Fonts | Inter, loaded via `<link>` in layout; also falls back to `-apple-system` (SF Pro on Apple devices) |
 | Styling | Tailwind CSS | Semantic color tokens — **edit only `src/app/globals.css` `:root` to retheme** |
 
 ### Color token system
@@ -38,38 +49,9 @@ All themed colors are CSS custom properties in `globals.css` `:root`, mapped to 
 
 ---
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx          # Root layout; loads Google Fonts (Inter), sets metadata
-│   ├── page.tsx            # Home page ("use client"); auth check, progress loading, renders cards
-│   ├── globals.css         # CSS custom properties (:root) for all theme tokens
-│   └── auth/callback/
-│       └── route.ts        # GET /auth/callback; PKCE code exchange for Supabase session
-│
-├── components/
-│   ├── DayCard.tsx         # Collapsible day card; completion state, auto-scroll to first incomplete
-│   ├── ContentItem.tsx     # Reading/challenge item with external link and checkbox
-│   ├── VideoItem.tsx       # Video item with optional subitems; opens VideoModal
-│   ├── VideoModal.tsx      # Full-screen modal with embedded YouTube iframe
-│   ├── MilestoneCard.tsx   # Special card for milestone days
-│   ├── ProgressBar.tsx     # Sticky header showing completed/total and percentage
-│   ├── LoginPage.tsx       # Magic link email form for Supabase auth
-│   └── ResetButton.tsx     # Reset all progress with confirmation
-│
-├── hooks/
-│   └── useProgress.ts      # Main hook; progress state, completion counts, video modal state
-│
-├── lib/
-│   ├── supabase.ts         # Singleton Supabase browser client
-│   ├── auth.ts             # getSessionUserId(); fetches current user from session
-│   └── progress.ts         # DB operations: loadProgress, markComplete, markIncomplete, resetAll
-│
-├── types/
-│   └── index.ts            # CourseDay, CourseItem, CourseSubItem, ItemType, ProgressMap
-│
-└── data/
-    └── course.ts           # COURSE_DATA: all 100 days with items (video/challenge) and subitems
-```
+## Key Patterns & Gotchas
+- **No server components** — all components use `"use client"`. This is intentional; do not introduce server components.
+- **`course.ts` is hand-authored** — do not attempt to scrape or auto-generate it. Add/edit days directly in the array.
+- **Milestone days** — `isMilestone: true` on a `CourseDay` renders a `MilestoneCard` instead of `DayCard`.
+- **Optimistic updates** — `useProgress` applies state changes immediately and rolls back on Supabase error.
+- **Progress keys** — each item has a unique `key` (format: `day-N-type-N`, e.g. `day-3-video-2`). The `progress` table is keyed on `(user_id, item_key)`.
