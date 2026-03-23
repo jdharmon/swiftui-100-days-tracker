@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "100 Days of SwiftUI Tracker",
   description: "Track your progress through Paul Hudson's 100 Days of SwiftUI course",
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
