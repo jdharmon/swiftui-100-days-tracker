@@ -57,12 +57,10 @@ export default function ContentItem({
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => !completed && onComplete(item.key, day)}
-        className={`flex items-center gap-2 text-sm transition-colors hover:text-accent ${
-          completed ? "text-fg-dim line-through" : "text-fg"
-        }`}
+        className="flex items-center gap-2 text-sm transition-colors hover:text-accent"
       >
         <span className="text-lg">{icon}</span>
-        <span>{item.label}</span>
+        <span className={completed ? "text-fg-dim line-through" : "text-fg"}>{item.label}</span>
         <svg
           className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity"
           fill="none"
