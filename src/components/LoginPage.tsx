@@ -47,7 +47,9 @@ export default function LoginPage() {
           <div className="space-y-4">
             <p className="text-fg">
               Check your email — we sent a sign-in link to{" "}
-              <span className="text-accent">{email}</span>.
+              <span className="text-accent">{email}</span>. After tapping the
+              link, return to this app and you&apos;ll be signed in
+              automatically.
             </p>
             <button
               onClick={() => { setEmail(""); setState("idle"); }}
