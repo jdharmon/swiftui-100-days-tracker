@@ -47,7 +47,21 @@ export default function Home() {
       setAuthLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // When running as a home screen app, magic links open in Safari rather than
+    // the PWA. The session cookie is shared, so re-check when the app regains focus.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setUserId(session?.user?.id ?? null);
+        });
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      subscription.unsubscribe();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   const progress = useProgress(userId);
