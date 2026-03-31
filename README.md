@@ -34,7 +34,8 @@ A progress tracker for Paul Hudson's [100 Days of SwiftUI](https://www.hackingwi
    ```
    supabase/migrations/0001_create_progress.sql
    ```
-3. In **Authentication → URL Configuration**, add your app's URL to **Redirect URLs** (e.g. `http://localhost:3000/auth/callback` for local dev)
+3. Go to **Database → Replication** and enable Realtime for the `progress` table
+4. In **Authentication → URL Configuration**, add your app's URL to **Redirect URLs** (e.g. `http://localhost:3000/auth/callback` for local dev)
 
 ### 2. Configure environment variables
 
@@ -69,4 +70,4 @@ The app uses Supabase magic links (email OTP with PKCE flow). When a user enters
 
 ## How Progress Works
 
-Progress is stored per-item in Supabase's `progress` table, keyed by `user_id` and `item_key` (e.g. `day-1-video-1`). Because auth is tied to an email address, progress syncs automatically across any device or browser where you sign in.
+Progress is stored per-item in Supabase's `progress` table, keyed by `user_id` and `item_key` (e.g. `day-1-video-1`). The app subscribes to Supabase Realtime on the `progress` table, so changes made on one device appear instantly on all other open tabs or devices signed in with the same account. Updates are also optimistic — the UI responds immediately and rolls back if the DB write fails.

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import * as progressLib from "@/lib/progress";
+import { getSupabase } from "@/lib/supabase";
 import { TOTAL_ITEMS } from "@/data/course";
 import { ProgressMap } from "@/types";
 
@@ -42,8 +43,36 @@ export function useProgress(userId: string | null): UseProgressReturn {
       .catch(() => {
         if (!cancelled) setIsLoading(false);
       });
+
+    const channel = getSupabase()
+      .channel("progress-sync")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "progress",
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            const key = (payload.new as { item_key: string }).item_key;
+            setProgressMap((prev) => ({ ...prev, [key]: true }));
+          } else if (payload.eventType === "DELETE") {
+            const key = (payload.old as { item_key: string }).item_key;
+            setProgressMap((prev) => {
+              const next = { ...prev };
+              delete next[key];
+              return next;
+            });
+          }
+        }
+      )
+      .subscribe();
+
     return () => {
       cancelled = true;
+      getSupabase().removeChannel(channel);
     };
   }, [userId]);
 
