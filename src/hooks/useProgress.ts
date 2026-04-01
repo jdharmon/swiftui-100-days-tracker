@@ -45,24 +45,25 @@ export function useProgress(userId: string | null): UseProgressReturn {
       });
 
     const channel = getSupabase()
-      .channel("progress-sync")
+      .channel(`progress-${userId}`)
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
           table: "progress",
-          filter: `user_id=eq.${userId}`,
         },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            const key = (payload.new as { item_key: string }).item_key;
-            setProgressMap((prev) => ({ ...prev, [key]: true }));
+            const row = payload.new as { item_key: string; user_id: string };
+            if (row.user_id !== userId) return;
+            setProgressMap((prev) => ({ ...prev, [row.item_key]: true }));
           } else if (payload.eventType === "DELETE") {
-            const key = (payload.old as { item_key: string }).item_key;
+            const row = payload.old as { item_key: string; user_id: string };
+            if (row.user_id !== userId) return;
             setProgressMap((prev) => {
               const next = { ...prev };
-              delete next[key];
+              delete next[row.item_key];
               return next;
             });
           }
